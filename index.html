@@ -2,7 +2,7 @@
 <html lang="es">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Acceso directo · Arkadia · FADED · Local Boost</title>
+<title>Acceso a tus apps · Arkadia · FADED · Local Boost</title>
 <meta name="robots" content="noindex">
 <style>
   :root{--bg:#12100f;--card:#1d1a18;--line:#332e2a;--tx:#f2ede6;--dim:#a99f96;--hi:#e2544a}
@@ -13,46 +13,92 @@
   p.lead{color:var(--dim);font-size:14px;margin:0 0 22px}
   section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:0 0 12px}
   h2{font-size:15px;margin:0 0 10px;letter-spacing:.02em}
-  a.b{display:block;text-align:center;text-decoration:none;border-radius:10px;padding:12px;margin:6px 0 0;font-weight:600}
-  a.main{background:var(--hi);color:#fff}
+  button.b,a.b{display:block;width:100%;text-align:center;text-decoration:none;border-radius:10px;padding:12px;margin:6px 0 0;font-weight:600;font:inherit;cursor:pointer}
+  button.main{background:var(--hi);color:#fff;border:0}
   a.alt{background:transparent;border:1px solid var(--line);color:var(--tx)}
-  small{display:block;color:var(--dim);font-size:12px;margin-top:6px}
+  #aviso{display:none;margin:10px 0 0;padding:10px 12px;border-radius:10px;background:#3a1d1a;border:1px solid #5c2b26;font-size:14px}
   .foot{color:var(--dim);font-size:12px;margin-top:18px;line-height:1.45}
   .lang{float:right;color:var(--dim);font-size:13px;text-decoration:none;border:1px solid var(--line);border-radius:8px;padding:3px 9px}
 </style>
 <main>
   <a class="lang" href="#" onclick="document.documentElement.lang=document.documentElement.lang==='es'?'en':'es';pintar();return false" id="lg">English</a>
-  <h1 data-es="Acceso directo a tus apps" data-en="Direct access to your apps">Acceso directo a tus apps</h1>
-  <p class="lead" data-es="Guarda esta página. Si un enlace no abre, usa el de respaldo: es la misma app, con los mismos datos."
-     data-en="Bookmark this page. If a link does not open, use the backup one: it is the same app, same data.">Guarda esta página. Si un enlace no abre, usa el de respaldo: es la misma app, con los mismos datos.</p>
+  <h1 data-es="Acceso a tus apps" data-en="Access to your apps">Acceso a tus apps</h1>
+  <p class="lead" data-es="Un botón: comprueba cuál de las dos direcciones responde y te lleva a la que funciona."
+     data-en="One button: it checks which address answers and takes you to the working one.">Un botón: comprueba cuál de las dos direcciones responde y te lleva a la que funciona.</p>
+  <p id="aviso" data-es="Ahora mismo no responde ninguna de las dos. Prueba en unos minutos."
+     data-en="Neither address is answering right now. Try again in a few minutes."></p>
 
   <section>
     <h2>Arkadia Tattoo</h2>
-    <a class="b main" href="https://www.arkadiatattoo.com/hub/">arkadiatattoo.com/hub</a>
-    <a class="b alt" href="https://arkadia-tattoo.pages.dev/hub/" data-es="Respaldo · Arkadia" data-en="Backup · Arkadia">Respaldo · Arkadia</a>
+    <button class="b main" data-n="arkadia" data-es="Entrar" data-en="Enter">Entrar</button>
+    <a class="b alt" href="https://www.arkadiatattoo.com/hub/" data-es="Ir a la dirección oficial" data-en="Go to the official address">Ir a la dirección oficial</a>
   </section>
 
   <section>
     <h2>FADED Barbershop</h2>
-    <a class="b main" href="https://www.fadedbarbershopmadrid.com/hub/">fadedbarbershopmadrid.com/hub</a>
-    <a class="b alt" href="https://faded-barbershop-madrid.pages.dev/hub/" data-es="Respaldo · FADED" data-en="Backup · FADED">Respaldo · FADED</a>
+    <button class="b main" data-n="faded" data-es="Entrar" data-en="Enter">Entrar</button>
+    <a class="b alt" href="https://www.fadedbarbershopmadrid.com/hub/" data-es="Ir a la dirección oficial" data-en="Go to the official address">Ir a la dirección oficial</a>
   </section>
 
   <section>
     <h2>Local Boost</h2>
-    <a class="b main" href="https://www.localboostspain.com/">localboostspain.com</a>
-    <a class="b alt" href="https://localboostspain-web.pages.dev/" data-es="Respaldo · Local Boost" data-en="Backup · Local Boost">Respaldo · Local Boost</a>
+    <button class="b main" data-n="localboost" data-es="Entrar" data-en="Enter">Entrar</button>
+    <a class="b alt" href="https://www.localboostspain.com/" data-es="Ir a la dirección oficial" data-en="Go to the official address">Ir a la dirección oficial</a>
   </section>
 
-  <p class="foot" data-es="El respaldo puede pedirte iniciar sesión otra vez (es otro dominio). Tu usuario y contraseña son los mismos."
-     data-en="The backup may ask you to sign in again (it is another domain). Your username and password are the same.">El respaldo puede pedirte iniciar sesión otra vez (es otro dominio). Tu usuario y contraseña son los mismos.</p>
+  <p class="foot" data-es="La dirección de respaldo es la misma app con los mismos datos; puede pedirte iniciar sesión otra vez. Tu usuario y contraseña son los mismos."
+     data-en="The backup address is the same app with the same data; it may ask you to sign in again. Your username and password are the same.">La dirección de respaldo es la misma app con los mismos datos; puede pedirte iniciar sesión otra vez. Tu usuario y contraseña son los mismos.</p>
 </main>
 <script>
+  // Dos direcciones por negocio: la OFICIAL (dominio propio) y la de RESPALDO (otro
+  // rango de IP de Cloudflare). El botón comprueba EN PARALELO cuál responde y lleva
+  // a esa; si el oficial no contesta, va al respaldo, y si el respaldo no contesta,
+  // va al oficial. Funciona en los dos sentidos.
+  // La sonda es `fetch` en modo `no-cors`: no necesita CORS (no lee la respuesta),
+  // solo saber si la red conecta; con AbortController evita esperar de más.
+  var NEGOCIOS = {
+    arkadia:   { oficial: 'https://www.arkadiatattoo.com/hub/',        respaldo: 'https://arkadia-tattoo.pages.dev/hub/' },
+    faded:     { oficial: 'https://www.fadedbarbershopmadrid.com/hub/', respaldo: 'https://faded-barbershop-madrid.pages.dev/hub/' },
+    localboost:{ oficial: 'https://www.localboostspain.com/',           respaldo: 'https://localboostspain-web.pages.dev/' }
+  };
+  var MS_SONDA = 3000;
+
+  function vivo(url){
+    return new Promise(function(res){
+      var c = ('AbortController' in window) ? new AbortController() : null;
+      var t = setTimeout(function(){ if (c) c.abort(); res(false); }, MS_SONDA);
+      var opts = { mode: 'no-cors', cache: 'no-store' };
+      if (c) opts.signal = c.signal;
+      fetch(url, opts).then(function(){ clearTimeout(t); res(true); },
+                            function(){ clearTimeout(t); res(false); });
+    });
+  }
+
+  function entrar(clave, boton){
+    var n = NEGOCIOS[clave];
+    if (!n) return;
+    if (boton) { boton.disabled = true; boton.dataset.prev = boton.textContent; boton.textContent = '…'; }
+    document.getElementById('aviso').style.display = 'none';
+    Promise.all([vivo(n.oficial), vivo(n.respaldo)]).then(function(r){
+      var destino = r[0] ? n.oficial : (r[1] ? n.respaldo : null);
+      if (destino) { location.href = destino; return; }
+      if (boton) { boton.disabled = false; boton.textContent = boton.dataset.prev || 'Entrar'; }
+      document.getElementById('aviso').style.display = 'block';
+    });
+  }
+
   function pintar(){
     var es = document.documentElement.lang !== 'en';
     document.querySelectorAll('[data-es]').forEach(function(n){ n.textContent = es ? n.dataset.es : n.dataset.en; });
     document.getElementById('lg').textContent = es ? 'English' : 'Español';
   }
+  document.querySelectorAll('button[data-n]').forEach(function(b){
+    b.addEventListener('click', function(){ entrar(b.dataset.n, b); });
+  });
   pintar();
+
+  // Enlace directo a un negocio: .../?n=arkadia  (entra sin pasar por la lista).
+  var clave = (new URLSearchParams(location.search)).get('n');
+  if (clave && NEGOCIOS[clave]) entrar(clave, null);
 </script>
 </html>
